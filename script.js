@@ -1,11 +1,15 @@
 // DOM Elements
 const dashboardSection = document.getElementById('dashboard');
 const addEmployeeSection = document.getElementById('addEmployee');
+const searchEmployee = document.getElementById('searchEmployee');
 const dashboardBtn = document.getElementById('dashboardBtn');
 const addEmployeeBtn = document.getElementById('addEmployeeBtn');
+
 const employeeForm = document.getElementById('employeeForm');
 const employeeTableBody = document.querySelector('#employeeTable tbody');
 const submitButton = employeeForm.querySelector('button[type="submit"]');
+const searchEmpBtn = document.getElementById('searchEmpBtn');
+const searchResult = document.getElementById('searchResult');
 
 // State to track editing
 let editingEmployeeId = null;
@@ -15,6 +19,9 @@ dashboardBtn.addEventListener('click', () => switchSection('dashboard'));
 addEmployeeBtn.addEventListener('click', () => {
     resetForm();
     switchSection('addEmployee');
+});
+searchEmployeeBtn.addEventListener('click', () => {
+    switchSection('searchEmployee')
 });
 
 function switchSection(sectionId) {
@@ -108,6 +115,41 @@ function editEmployee(id) {
         })
         .catch(error => console.error('Error fetching employee for edit:', error));
 }
+
+// Search Employee
+searchEmpBtn.addEventListener('click', () => {
+    const empId = document.getElementById('searchEmpId').value;
+
+    if (!empId) {
+        searchResult.innerHTML = `<p style="color: red;">Please enter an Employee ID to search.</p>`;
+        return; // Exit the function if no ID is provided
+    }
+
+    // Show loading message
+    searchResult.innerHTML = `<p>Loading...</p>`;
+
+    fetch(`http://localhost:8080/api/v1/employee/${empId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Employee not found!');
+            }
+            return response.json();
+        })
+        .then(employee => {
+            searchResult.innerHTML = `
+                <h3>Employee Details</h3>
+                <p><strong>ID:</strong> ${employee.id}</p>
+                <p><strong>Name:</strong> ${employee.name}</p>
+                <p><strong>Email:</strong> ${employee.email}</p>
+                <p><strong>Department:</strong> ${employee.department}</p>
+                <p><strong>Salary:</strong> ${employee.salary}</p>
+            `;
+        })
+        .catch(error => {
+            searchResult.innerHTML = `<p style="color: red;">${error.message}</p>`;
+        });
+});
+
 
 // Delete Employee
 function deleteEmployee(id) {

@@ -12,6 +12,7 @@
         <nav>
             <button id="dashboardBtn">Dashboard</button>
             <button id="addEmployeeBtn">Add Employee</button>
+            <button id="searchEmployeeBtn">Search Employee</button>
         </nav>
     </header>
     <main>
@@ -60,6 +61,15 @@
 
                 <button type="submit">Add Employee</button>
             </form>
+        </section>
+        <!-- search employee -->
+        <section id="searchEmployee">
+            <h2>Search Employee</h2>
+            <input type="number" id="searchEmpId" placeholder="Enter Employee ID" />
+            <button id="searchEmpBtn">Search</button>
+            <div id="searchResult" class="employee-details">
+                <!-- Employee details will be displayed here -->
+            </div>
         </section>
     </main>
     <script src="script.js"></script>
